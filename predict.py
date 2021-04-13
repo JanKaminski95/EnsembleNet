@@ -18,6 +18,7 @@ from skimage.measure import label, regionprops
 from skimage.morphology import dilation
 from skimage.util.shape import view_as_windows
 from skimage.color import label2rgb
+from sklearn.metrics import precision_recall_curve, auc
 torch.manual_seed(95)
 np.random.seed(95)
 
