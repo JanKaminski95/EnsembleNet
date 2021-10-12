@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+
 from matplotlib import image as mpimg
 import numpy as np
 from PIL import Image
@@ -32,19 +33,22 @@ class MyDataset(Dataset):
         self.rot = rotation
         self.p = p
         self.rotation = rotation
-        targets_path = sorted(glob.glob('./data/' + root + '/targets/' + n_slice + '.jpg'))
+        targets_path = sorted(glob.glob('/home/janek/cluster/data/ensemble/' + root + '/targets/' + n_slice + '.tif'))
         self.targets = [io.imread(i) for i in targets_path]
-        images_path = sorted(glob.glob('./data/' + root + '/images/' + n_slice + '.jpg'))
+        images_path = sorted(glob.glob('/home/janek/cluster/data/ensemble/' + root + '/images/' + n_slice + '.tif'))
         self.images = [io.imread(i) for i in images_path]
-
     def __getitem__(self, index):
 
         image = self.images[index]
+        image = image/image.max()
+        
         if len(self.targets) == 0:
             mask = np.zeros((512, 512))
         else:
             mask = self.targets[index]
-
+        
+        mask = mask/np.max(mask)
+        
         do_hflip = random.random() > self.p
 
         do_vflip = random.random() > self.p
@@ -59,6 +63,8 @@ class MyDataset(Dataset):
 
         image = TF.to_tensor(image)
         mask = TF.to_tensor(mask)
+        # image = image.unsqueeze(0)
+        # mask= mask.unsqueeze(0)
 
         if self.hflip and do_hflip:
             image, mask = TF.hflip(image), TF.hflip(mask)

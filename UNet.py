@@ -55,20 +55,22 @@ class UNet(nn.Module):
         self.max_pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
         self.down_conv1 = double_conv(self.input_chan ,self.init_chan)
-        self.down_conv2 = double_conv(self.init_chan ,self.init_cha n *2)
-        self.down_conv3 = double_conv(self.init_cha n *2 ,self.init_cha n *4)
-        self.down_conv4 = double_conv(self.init_cha n *4 ,self.init_cha n *8)
-        self.down_conv5 = double_conv(self.init_cha n *8 ,self.init_cha n *16)
+        self.down_conv2 = double_conv(self.init_chan ,self.init_chan *2)
+        self.down_conv3 = double_conv(self.init_chan *2 ,self.init_chan *4)
 
-        self.trans_conv1 = nn.ConvTranspose2d(in_channels=self.init_cha n *16, out_channels=self.init_cha n *8, kernel_size=2, stride=2)
-        self.trans_conv2 = nn.ConvTranspose2d(in_channels=self.init_cha n *8, out_channels=self.init_cha n *4, kernel_size=2, stride=2)
-        self.trans_conv3 = nn.ConvTranspose2d(in_channels=self.init_cha n *4, out_channels=self.init_cha n *2, kernel_size=2, stride=2)
-        self.trans_conv4 = nn.ConvTranspose2d(in_channels=self.init_cha n *2, out_channels=self.init_chan, kernel_size=2, stride=2)
+        self.down_conv4 = double_conv(self.init_chan *4 ,self.init_chan *8)
+        self.down_conv5 = double_conv(self.init_chan *8 ,self.init_chan *16)
 
-        self.up_conv1 = double_conv(self.init_cha n *16 ,self.init_cha n *8)
-        self.up_conv2 = double_conv(self.init_cha n *8 ,self.init_cha n *4)
-        self.up_conv3 = double_conv(self.init_cha n *4 ,self.init_cha n *2)
-        self.up_conv4 = double_conv(self.init_cha n *2 ,self.init_chan)
+        self.trans_conv1 = nn.ConvTranspose2d(in_channels=self.init_chan *16, out_channels=self.init_chan *8, kernel_size=2, stride=2)
+        self.trans_conv2 = nn.ConvTranspose2d(in_channels=self.init_chan *8, out_channels=self.init_chan *4, kernel_size=2, stride=2)
+        self.trans_conv3 = nn.ConvTranspose2d(in_channels=self.init_chan *4, out_channels=self.init_chan *2, kernel_size=2, stride=2)
+        self.trans_conv4 = nn.ConvTranspose2d(in_channels=self.init_chan *2, out_channels=self.init_chan, kernel_size=2, stride=2)
+
+        self.up_conv1 = double_conv(self.init_chan *16 ,self.init_chan *8)
+        self.up_conv2 = double_conv(self.init_chan *8 ,self.init_chan *4)
+        self.up_conv3 = double_conv(self.init_chan *4 ,self.init_chan *2)
+
+        self.up_conv4 = double_conv(self.init_chan *2 ,self.init_chan)
 
 
         self.out = nn.Conv2d(in_channels = self.init_chan, out_channels = 1, kernel_size=1)
